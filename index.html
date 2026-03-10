@@ -1,0 +1,882 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>West Hunt — Arcade Control Diagram</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Rye&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #fafafa;
+    font-family: 'Inter', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px 60px;
+    color: #222;
+  }
+
+  h1 {
+    font-family: 'Rye', serif;
+    font-size: 1.6rem;
+    color: #333;
+    letter-spacing: 3px;
+    margin-bottom: 4px;
+  }
+
+  .subtitle {
+    font-size: 0.8rem;
+    color: #999;
+    letter-spacing: 1px;
+    margin-bottom: 50px;
+  }
+
+  /* Main layout: diagram left, labels right */
+  .diagram-container {
+    display: flex;
+    align-items: flex-start;
+    gap: 0;
+    width: 900px;
+    max-width: 96vw;
+  }
+
+  .hardware-column {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    flex-shrink: 0;
+    width: 480px;
+  }
+
+  .labels-column {
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+    padding-left: 10px;
+    width: 400px;
+  }
+
+  /* Each row */
+  .diagram-row {
+    display: flex;
+    align-items: center;
+    width: 880px;
+    max-width: 96vw;
+    margin: 0 auto;
+  }
+
+  .hw-part {
+    display: flex;
+    justify-content: center;
+    width: 480px;
+    flex-shrink: 0;
+  }
+
+  .label-part {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding-left: 10px;
+    white-space: nowrap;
+  }
+
+  .arrow-line {
+    width: 80px;
+    height: 2px;
+    background: #333;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .arrow-line::before {
+    content: '';
+    position: absolute;
+    right: 100%;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 5px solid transparent;
+    border-right-color: #333;
+  }
+
+  .label-text {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: #333;
+  }
+
+  .label-desc {
+    font-size: 0.75rem;
+    color: #999;
+    margin-top: 2px;
+    font-weight: 400;
+  }
+
+  /* ======== SCREEN ======== */
+  .screen-box {
+    width: 380px;
+    height: 200px;
+    background: linear-gradient(145deg, #1a1a1a 0%, #333 100%);
+    border-radius: 10px;
+    border: 3px solid #111;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  }
+
+  .screen-inner {
+    position: absolute;
+    inset: 8px;
+    background: #0d0d0d;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .screen-text {
+    font-family: 'Rye', serif;
+    font-size: 1.8rem;
+    color: #d4a24e;
+    text-shadow: 0 0 20px rgba(212,162,78,0.4);
+    transition: all 0.2s;
+  }
+
+  .screen-sub-text {
+    font-size: 0.75rem;
+    color: #666;
+    letter-spacing: 4px;
+    margin-top: 6px;
+  }
+
+  /* Game states */
+  .screen-inner.state-draw .screen-text {
+    color: #ff3333;
+    font-size: 2.5rem;
+    text-shadow: 0 0 40px rgba(255,50,50,0.6);
+  }
+
+  .screen-inner.state-p1wins .screen-text { color: #e74c3c; }
+  .screen-inner.state-p2wins .screen-text { color: #3498db; }
+
+  .screen-flash {
+    position: absolute;
+    inset: 0;
+    background: rgba(255,200,50,0.3);
+    opacity: 0;
+    transition: opacity 0.05s;
+    pointer-events: none;
+  }
+
+  /* ======== MENU BUTTONS ======== */
+  .menu-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+  }
+
+  .menu-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 6px;
+    border: 2px solid #ccc;
+    background: #fff;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.65rem;
+    font-weight: 700;
+    color: #999;
+    transition: all 0.15s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.06);
+  }
+
+  .menu-btn:hover { border-color: #d4a24e; color: #d4a24e; }
+  .menu-btn:active { transform: scale(0.92); }
+
+  .menu-btn.coin-btn {
+    width: 50px;
+    background: #fffbe6;
+    border-color: #d4a24e;
+    color: #d4a24e;
+  }
+
+  /* ======== PLAYER CONTROLS ======== */
+  .player-controls {
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+    align-items: flex-end;
+  }
+
+  .player-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .player-tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+  }
+
+  .p1 .player-tag { color: #e74c3c; }
+  .p2 .player-tag { color: #3498db; }
+
+  /* Big dome button */
+  .dome-btn-wrap {
+    position: relative;
+    cursor: pointer;
+  }
+
+  .dome-btn {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    position: relative;
+    transition: transform 0.08s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .dome-btn-wrap:active .dome-btn {
+    transform: scale(0.93) translateY(3px);
+  }
+
+  .dome-base {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+  }
+
+  .p1 .dome-base {
+    background: radial-gradient(circle at 40% 35%, #f77 0%, #e74c3c 40%, #a93226 100%);
+    box-shadow: 0 6px 0 #7b241c, 0 8px 16px rgba(0,0,0,0.2);
+  }
+
+  .p2 .dome-base {
+    background: radial-gradient(circle at 40% 35%, #6cb4e6 0%, #3498db 40%, #1a5276 100%);
+    box-shadow: 0 6px 0 #0e3d5c, 0 8px 16px rgba(0,0,0,0.2);
+  }
+
+  .dome-btn-wrap:active .p1 .dome-base {
+    box-shadow: 0 2px 0 #7b241c, 0 4px 8px rgba(0,0,0,0.2), 0 0 40px rgba(231,76,60,0.4);
+  }
+
+  .dome-btn-wrap:active .p2 .dome-base {
+    box-shadow: 0 2px 0 #0e3d5c, 0 4px 8px rgba(0,0,0,0.2), 0 0 40px rgba(52,152,219,0.4);
+  }
+
+  .dome-highlight {
+    position: absolute;
+    width: 50px;
+    height: 30px;
+    top: 18px;
+    left: 22px;
+    background: rgba(255,255,255,0.25);
+    border-radius: 50%;
+    filter: blur(4px);
+  }
+
+  .dome-label {
+    position: relative;
+    z-index: 1;
+    font-family: 'Rye', serif;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.9);
+    text-shadow: 0 1px 3px rgba(0,0,0,0.4);
+    letter-spacing: 3px;
+  }
+
+  /* LED ring */
+  .led-ring {
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 3px solid transparent;
+    transition: all 0.15s;
+  }
+
+  .p1 .led-ring { border-color: rgba(231,76,60,0.2); }
+  .p2 .led-ring { border-color: rgba(52,152,219,0.2); }
+
+  .p1 .led-ring.active {
+    border-color: rgba(231,76,60,0.7);
+    box-shadow: 0 0 20px rgba(231,76,60,0.3);
+  }
+
+  .p2 .led-ring.active {
+    border-color: rgba(52,152,219,0.7);
+    box-shadow: 0 0 20px rgba(52,152,219,0.3);
+  }
+
+  .key-hint {
+    font-size: 0.65rem;
+    color: #bbb;
+    margin-top: 4px;
+    padding: 2px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background: #fff;
+  }
+
+  /* ======== SPEAKER ======== */
+  .speakers-row {
+    display: flex;
+    gap: 120px;
+    justify-content: center;
+  }
+
+  .speaker-grill {
+    display: flex;
+    gap: 4px;
+  }
+
+  .speaker-grill .bar {
+    width: 3px;
+    height: 24px;
+    background: #ccc;
+    border-radius: 2px;
+  }
+
+  /* ======== GAME STATE PANEL ======== */
+  .game-panel {
+    margin-top: 44px;
+    width: 880px;
+    max-width: 96vw;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 20px 24px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  }
+
+  .game-panel h3 {
+    font-size: 0.75rem;
+    color: #999;
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+    font-weight: 600;
+  }
+
+  .game-stats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .stat-block {
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+  }
+
+  .stat-value.p1c { color: #e74c3c; }
+  .stat-value.p2c { color: #3498db; }
+
+  .stat-label {
+    font-size: 0.65rem;
+    color: #aaa;
+    letter-spacing: 1px;
+    margin-top: 2px;
+  }
+
+  .stat-vs {
+    font-family: 'Rye', serif;
+    font-size: 1rem;
+    color: #ccc;
+  }
+
+  .reaction-time {
+    font-size: 0.8rem;
+    color: #bbb;
+    text-align: center;
+    margin-top: 12px;
+    min-height: 1.2em;
+  }
+
+  .reaction-time span { font-weight: 700; }
+  .reaction-time .fast { color: #2ecc71; }
+  .reaction-time .slow { color: #e67e22; }
+
+  .game-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+    justify-content: center;
+  }
+
+  .action-btn {
+    padding: 8px 20px;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+    background: #fff;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: #555;
+  }
+
+  .action-btn:hover { border-color: #999; color: #222; }
+
+  .action-btn.primary {
+    background: #d4a24e;
+    border-color: #d4a24e;
+    color: #fff;
+  }
+
+  .action-btn.primary:hover { background: #c4922e; }
+
+  .mode-indicator {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 0.7rem;
+    color: #bbb;
+    letter-spacing: 1px;
+  }
+
+  /* Footer */
+  .footer {
+    margin-top: 40px;
+    font-size: 0.7rem;
+    color: #ccc;
+    letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<h1>WEST HUNT</h1>
+<p class="subtitle">Arcade Cabinet — Physical Control Layout</p>
+
+<!-- ROW 1: Screen -->
+<div class="diagram-row">
+  <div class="hw-part">
+    <div class="screen-box">
+      <div class="screen-inner" id="screenInner">
+        <div class="screen-text" id="screenText">WEST HUNT</div>
+        <div class="screen-sub-text" id="screenSub">INSERT COIN</div>
+        <div class="screen-flash" id="screenFlash"></div>
+      </div>
+    </div>
+  </div>
+  <div class="label-part">
+    <svg width="80" height="20"><line x1="0" y1="10" x2="68" y2="10" stroke="#333" stroke-width="2"/><polygon points="0,5 0,15 8,10" fill="#333"/></svg>
+    <div>
+      <div class="label-text">Screen</div>
+      <div class="label-desc">16:9 display, Western themed UI</div>
+    </div>
+  </div>
+</div>
+
+<div style="height: 24px;"></div>
+
+<!-- ROW 2: Menu buttons -->
+<div class="diagram-row">
+  <div class="hw-part">
+    <div class="menu-buttons">
+      <div class="menu-btn" id="menuMode" title="Toggle Mode">MODE</div>
+      <div class="menu-btn" title="Settings">SET</div>
+      <div class="menu-btn" title="Volume">VOL</div>
+      <div class="menu-btn coin-btn" id="coinBtn" title="Insert Coin">COIN</div>
+    </div>
+  </div>
+  <div class="label-part">
+    <svg width="80" height="20"><line x1="0" y1="10" x2="68" y2="10" stroke="#333" stroke-width="2"/><polygon points="0,5 0,15 8,10" fill="#333"/></svg>
+    <div>
+      <div class="label-text">Menu / Settings</div>
+      <div class="label-desc">Mode select, volume, coin slot</div>
+    </div>
+  </div>
+</div>
+
+<div style="height: 28px;"></div>
+
+<!-- ROW 3: Player buttons -->
+<div class="diagram-row">
+  <div class="hw-part">
+    <div class="player-controls">
+      <!-- P1 -->
+      <div class="player-unit p1">
+        <div class="player-tag">PLAYER 1</div>
+        <div class="dome-btn-wrap" id="p1wrap">
+          <div class="dome-btn">
+            <div class="dome-base"></div>
+            <div class="dome-highlight"></div>
+            <div class="led-ring" id="p1ring"></div>
+            <span class="dome-label">FIRE</span>
+          </div>
+        </div>
+        <div class="key-hint">Press A</div>
+      </div>
+      <!-- P2 -->
+      <div class="player-unit p2">
+        <div class="player-tag">PLAYER 2</div>
+        <div class="dome-btn-wrap" id="p2wrap">
+          <div class="dome-btn">
+            <div class="dome-base"></div>
+            <div class="dome-highlight"></div>
+            <div class="led-ring" id="p2ring"></div>
+            <span class="dome-label">FIRE</span>
+          </div>
+        </div>
+        <div class="key-hint">Press L</div>
+      </div>
+    </div>
+  </div>
+  <div class="label-part">
+    <svg width="80" height="20"><line x1="0" y1="10" x2="68" y2="10" stroke="#333" stroke-width="2"/><polygon points="0,5 0,15 8,10" fill="#333"/></svg>
+    <div>
+      <div class="label-text">Dome Buttons (100mm)</div>
+      <div class="label-desc">One per player — the only control</div>
+    </div>
+  </div>
+</div>
+
+<div style="height: 24px;"></div>
+
+<!-- ROW 4: Speakers -->
+<div class="diagram-row">
+  <div class="hw-part">
+    <div class="speakers-row">
+      <div class="speaker-grill">
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      </div>
+      <div class="speaker-grill">
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+        <div class="bar"></div><div class="bar"></div><div class="bar"></div>
+      </div>
+    </div>
+  </div>
+  <div class="label-part">
+    <svg width="80" height="20"><line x1="0" y1="10" x2="68" y2="10" stroke="#333" stroke-width="2"/><polygon points="0,5 0,15 8,10" fill="#333"/></svg>
+    <div>
+      <div class="label-text">Stereo Speakers</div>
+      <div class="label-desc">Directional gunshot SFX</div>
+    </div>
+  </div>
+</div>
+
+<!-- INTERACTIVE GAME PANEL -->
+<div class="game-panel">
+  <h3>INTERACTIVE DEMO</h3>
+  <div class="game-stats">
+    <div class="stat-block">
+      <div class="stat-value p1c" id="p1score">0</div>
+      <div class="stat-label">PLAYER 1</div>
+    </div>
+    <div class="stat-vs">VS</div>
+    <div class="stat-block">
+      <div class="stat-value p2c" id="p2score">0</div>
+      <div class="stat-label">PLAYER 2</div>
+    </div>
+  </div>
+  <div class="reaction-time" id="reactionMsg"></div>
+  <div class="game-actions">
+    <button class="action-btn primary" id="startBtn">Start Round</button>
+    <button class="action-btn" id="resetBtn">Reset</button>
+    <button class="action-btn" id="modeBtn">Mode: Quick Draw</button>
+  </div>
+  <div class="mode-indicator" id="modeDesc">First to press after "DRAW!" wins</div>
+</div>
+
+<div class="footer">Designed by Tielong — Concept 2026</div>
+
+<script>
+  // === AUDIO via Web Audio API ===
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+  function playGunshot(pan = 0) {
+    // White noise burst shaped like a gunshot
+    const duration = 0.15;
+    const bufferSize = audioCtx.sampleRate * duration;
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 3);
+    }
+    const source = audioCtx.createBufferSource();
+    source.buffer = buffer;
+
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+    const panner = audioCtx.createStereoPanner();
+    panner.pan.value = pan;
+
+    // Low pass for body
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 3000;
+
+    source.connect(filter).connect(gain).connect(panner).connect(audioCtx.destination);
+    source.start();
+  }
+
+  function playDing() {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.frequency.value = 880;
+    osc.type = 'sine';
+    gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.3);
+  }
+
+  function playTick() {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.frequency.value = 600;
+    osc.type = 'square';
+    gain.gain.setValueAtTime(0.08, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.05);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.05);
+  }
+
+  // === DOM ===
+  const screenInner = document.getElementById('screenInner');
+  const screenText = document.getElementById('screenText');
+  const screenSub = document.getElementById('screenSub');
+  const screenFlash = document.getElementById('screenFlash');
+  const p1ring = document.getElementById('p1ring');
+  const p2ring = document.getElementById('p2ring');
+  const p1scoreEl = document.getElementById('p1score');
+  const p2scoreEl = document.getElementById('p2score');
+  const reactionMsg = document.getElementById('reactionMsg');
+  const startBtn = document.getElementById('startBtn');
+  const resetBtn = document.getElementById('resetBtn');
+  const modeBtn = document.getElementById('modeBtn');
+  const modeDesc = document.getElementById('modeDesc');
+  const coinBtn = document.getElementById('coinBtn');
+
+  let state = 'idle'; // idle, countdown, draw, done, rush, rushDone
+  let mode = 'quickdraw'; // quickdraw, gunrush
+  let drawTime = 0;
+  let p1score = 0, p2score = 0;
+  let rushTimer = null;
+  let rushP1 = 0, rushP2 = 0;
+  let rushDuration = 5000;
+  let countdownTimer = null;
+
+  function flash() {
+    screenFlash.style.opacity = '1';
+    setTimeout(() => screenFlash.style.opacity = '0', 80);
+  }
+
+  function setScreen(text, sub, cls) {
+    screenInner.className = 'screen-inner' + (cls ? ' ' + cls : '');
+    screenText.textContent = text;
+    screenSub.textContent = sub || '';
+  }
+
+  // === QUICK DRAW ===
+  function startQuickDraw() {
+    if (state !== 'idle') return;
+    state = 'countdown';
+    reactionMsg.innerHTML = '';
+    startBtn.disabled = true;
+
+    const delay = 1500 + Math.random() * 3000;
+    setScreen('GET READY...', 'Hands off the buttons!');
+
+    // Fake tension ticks
+    let tickCount = 0;
+    const tickInterval = setInterval(() => {
+      playTick();
+      tickCount++;
+    }, 400 + Math.random() * 300);
+
+    countdownTimer = setTimeout(() => {
+      clearInterval(tickInterval);
+      state = 'draw';
+      drawTime = performance.now();
+      setScreen('DRAW!', '', 'state-draw');
+      playDing();
+      p1ring.classList.add('active');
+      p2ring.classList.add('active');
+    }, delay);
+  }
+
+  function handleQuickDrawPress(player) {
+    if (state === 'countdown') {
+      // False start!
+      clearTimeout(countdownTimer);
+      state = 'idle';
+      startBtn.disabled = false;
+      const winner = player === 1 ? 2 : 1;
+      if (winner === 1) p1score++; else p2score++;
+      updateScores();
+      setScreen(`P${winner} WINS!`, `P${player} jumped the gun!`, winner === 1 ? 'state-p1wins' : 'state-p2wins');
+      reactionMsg.innerHTML = `<span class="slow">FALSE START by P${player}!</span>`;
+      if (player === 1) playGunshot(-0.8); else playGunshot(0.8);
+      flash();
+      p1ring.classList.remove('active');
+      p2ring.classList.remove('active');
+      return;
+    }
+
+    if (state !== 'draw') return;
+    state = 'done';
+    startBtn.disabled = false;
+    const rt = (performance.now() - drawTime).toFixed(1);
+    if (player === 1) { p1score++; playGunshot(-0.8); }
+    else { p2score++; playGunshot(0.8); }
+    updateScores();
+    flash();
+
+    const cls = player === 1 ? 'state-p1wins' : 'state-p2wins';
+    setScreen(`PLAYER ${player} WINS!`, `Reaction: ${rt}ms`, cls);
+
+    const speed = rt < 250 ? 'fast' : 'slow';
+    reactionMsg.innerHTML = `P${player} drew in <span class="${speed}">${rt}ms</span>`;
+    p1ring.classList.remove('active');
+    p2ring.classList.remove('active');
+    state = 'idle';
+  }
+
+  // === GUN RUSH ===
+  function startGunRush() {
+    if (state !== 'idle') return;
+    state = 'countdown';
+    reactionMsg.innerHTML = '';
+    startBtn.disabled = true;
+    rushP1 = 0; rushP2 = 0;
+
+    setScreen('GET READY...', 'Mash when it says GO!');
+
+    countdownTimer = setTimeout(() => {
+      state = 'rush';
+      setScreen('GO! MASH!', `${(rushDuration / 1000).toFixed(0)}s remaining`);
+      p1ring.classList.add('active');
+      p2ring.classList.add('active');
+      playDing();
+
+      const startT = Date.now();
+      rushTimer = setInterval(() => {
+        const remaining = Math.max(0, rushDuration - (Date.now() - startT));
+        const secs = (remaining / 1000).toFixed(1);
+        screenSub.textContent = `${secs}s — P1: ${rushP1} | P2: ${rushP2}`;
+        if (remaining <= 0) {
+          clearInterval(rushTimer);
+          endGunRush();
+        }
+      }, 50);
+    }, 1500 + Math.random() * 1500);
+  }
+
+  function handleGunRushPress(player) {
+    if (state !== 'rush') return;
+    if (player === 1) { rushP1++; playGunshot(-0.8); }
+    else { rushP2++; playGunshot(0.8); }
+    flash();
+  }
+
+  function endGunRush() {
+    state = 'idle';
+    startBtn.disabled = false;
+    p1ring.classList.remove('active');
+    p2ring.classList.remove('active');
+
+    let winner;
+    if (rushP1 > rushP2) { winner = 1; p1score++; }
+    else if (rushP2 > rushP1) { winner = 2; p2score++; }
+    else { winner = 0; }
+    updateScores();
+
+    if (winner === 0) {
+      setScreen('TIE!', `Both: ${rushP1} presses`);
+      reactionMsg.textContent = "Dead even!";
+    } else {
+      const cls = winner === 1 ? 'state-p1wins' : 'state-p2wins';
+      setScreen(`PLAYER ${winner} WINS!`, `P1: ${rushP1} vs P2: ${rushP2}`, cls);
+      reactionMsg.innerHTML = `P${winner} wins with <span class="fast">${winner === 1 ? rushP1 : rushP2} presses</span>`;
+    }
+  }
+
+  // === CONTROLS ===
+  function pressButton(player) {
+    audioCtx.resume();
+    if (mode === 'quickdraw') handleQuickDrawPress(player);
+    else handleGunRushPress(player);
+  }
+
+  function updateScores() {
+    p1scoreEl.textContent = p1score;
+    p2scoreEl.textContent = p2score;
+  }
+
+  startBtn.addEventListener('click', () => {
+    audioCtx.resume();
+    if (mode === 'quickdraw') startQuickDraw();
+    else startGunRush();
+  });
+
+  resetBtn.addEventListener('click', () => {
+    state = 'idle';
+    clearTimeout(countdownTimer);
+    clearInterval(rushTimer);
+    startBtn.disabled = false;
+    p1score = 0; p2score = 0;
+    updateScores();
+    setScreen('WEST HUNT', 'INSERT COIN');
+    reactionMsg.innerHTML = '';
+    p1ring.classList.remove('active');
+    p2ring.classList.remove('active');
+  });
+
+  modeBtn.addEventListener('click', () => {
+    if (state !== 'idle') return;
+    mode = mode === 'quickdraw' ? 'gunrush' : 'quickdraw';
+    modeBtn.textContent = mode === 'quickdraw' ? 'Mode: Quick Draw' : 'Mode: Gun Rush';
+    modeDesc.textContent = mode === 'quickdraw'
+      ? 'First to press after "DRAW!" wins'
+      : 'Mash the button — most presses in 5s wins';
+    setScreen('WEST HUNT', mode === 'quickdraw' ? 'QUICK DRAW' : 'GUN RUSH');
+  });
+
+  coinBtn.addEventListener('click', () => {
+    audioCtx.resume();
+    playDing();
+    setScreen('WEST HUNT', 'READY!');
+  });
+
+  // Keyboard
+  document.addEventListener('keydown', (e) => {
+    if (e.repeat) return;
+    if (e.key === 'a' || e.key === 'A') pressButton(1);
+    if (e.key === 'l' || e.key === 'L') pressButton(2);
+  });
+
+  // Mouse/touch on dome buttons
+  document.getElementById('p1wrap').addEventListener('mousedown', () => pressButton(1));
+  document.getElementById('p2wrap').addEventListener('mousedown', () => pressButton(2));
+  document.getElementById('p1wrap').addEventListener('touchstart', (e) => { e.preventDefault(); pressButton(1); });
+  document.getElementById('p2wrap').addEventListener('touchstart', (e) => { e.preventDefault(); pressButton(2); });
+</script>
+
+</body>
+</html>
