@@ -35,37 +35,11 @@
     margin-bottom: 50px;
   }
 
-  /* Main layout: diagram left, labels right */
-  .diagram-container {
-    display: flex;
-    align-items: flex-start;
-    gap: 0;
-    width: 900px;
-    max-width: 96vw;
-  }
-
-  .hardware-column {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 28px;
-    flex-shrink: 0;
-    width: 480px;
-  }
-
-  .labels-column {
-    display: flex;
-    flex-direction: column;
-    gap: 28px;
-    padding-left: 10px;
-    width: 400px;
-  }
-
   /* Each row */
   .diagram-row {
     display: flex;
     align-items: center;
-    width: 880px;
+    width: 920px;
     max-width: 96vw;
     margin: 0 auto;
   }
@@ -73,7 +47,7 @@
   .hw-part {
     display: flex;
     justify-content: center;
-    width: 480px;
+    width: 500px;
     flex-shrink: 0;
   }
 
@@ -83,24 +57,6 @@
     gap: 14px;
     padding-left: 10px;
     white-space: nowrap;
-  }
-
-  .arrow-line {
-    width: 80px;
-    height: 2px;
-    background: #333;
-    position: relative;
-    flex-shrink: 0;
-  }
-
-  .arrow-line::before {
-    content: '';
-    position: absolute;
-    right: 100%;
-    top: 50%;
-    transform: translateY(-50%);
-    border: 5px solid transparent;
-    border-right-color: #333;
   }
 
   .label-text {
@@ -115,6 +71,11 @@
     margin-top: 2px;
     font-weight: 400;
   }
+
+  .arrow-svg { flex-shrink: 0; }
+
+  .spacer { height: 24px; }
+  .spacer-lg { height: 36px; }
 
   /* ======== SCREEN ======== */
   .screen-box {
@@ -156,7 +117,6 @@
     margin-top: 6px;
   }
 
-  /* Game states */
   .screen-inner.state-draw .screen-text {
     color: #ff3333;
     font-size: 2.5rem;
@@ -209,12 +169,46 @@
     color: #d4a24e;
   }
 
+  /* ======== SECTION HEADERS ======== */
+  .section-header {
+    width: 920px;
+    max-width: 96vw;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .section-header .line {
+    flex: 1;
+    height: 1px;
+    background: #ddd;
+  }
+
+  .section-header .tag {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: #999;
+    padding: 4px 16px;
+    border: 1px solid #ddd;
+    border-radius: 20px;
+    background: #fff;
+    white-space: nowrap;
+  }
+
+  .section-header .tag.alt {
+    color: #d4a24e;
+    border-color: #e8d5a8;
+    background: #fffdf5;
+  }
+
   /* ======== PLAYER CONTROLS ======== */
   .player-controls {
     display: flex;
     justify-content: center;
-    gap: 80px;
-    align-items: flex-end;
+    gap: 60px;
+    align-items: flex-start;
   }
 
   .player-unit {
@@ -299,7 +293,6 @@
     letter-spacing: 3px;
   }
 
-  /* LED ring */
   .led-ring {
     position: absolute;
     inset: -8px;
@@ -310,16 +303,8 @@
 
   .p1 .led-ring { border-color: rgba(231,76,60,0.2); }
   .p2 .led-ring { border-color: rgba(52,152,219,0.2); }
-
-  .p1 .led-ring.active {
-    border-color: rgba(231,76,60,0.7);
-    box-shadow: 0 0 20px rgba(231,76,60,0.3);
-  }
-
-  .p2 .led-ring.active {
-    border-color: rgba(52,152,219,0.7);
-    box-shadow: 0 0 20px rgba(52,152,219,0.3);
-  }
+  .p1 .led-ring.active { border-color: rgba(231,76,60,0.7); box-shadow: 0 0 20px rgba(231,76,60,0.3); }
+  .p2 .led-ring.active { border-color: rgba(52,152,219,0.7); box-shadow: 0 0 20px rgba(52,152,219,0.3); }
 
   .key-hint {
     font-size: 0.65rem;
@@ -329,6 +314,352 @@
     border: 1px solid #ddd;
     border-radius: 4px;
     background: #fff;
+  }
+
+  /* ======== SLAP DUMMY ======== */
+  .slap-dummy-row {
+    display: flex;
+    justify-content: center;
+    gap: 60px;
+    align-items: flex-start;
+  }
+
+  .dummy-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .dummy-wrap {
+    position: relative;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  .dummy-head {
+    width: 100px;
+    height: 120px;
+    position: relative;
+    transition: transform 0.1s;
+  }
+
+  .dummy-wrap:active .dummy-head {
+    transform: rotate(15deg) translateX(8px);
+  }
+
+  .dummy-wrap.slapped .dummy-head {
+    animation: slapRecoil 0.3s ease-out;
+  }
+
+  @keyframes slapRecoil {
+    0% { transform: rotate(0); }
+    30% { transform: rotate(25deg) translateX(12px); }
+    60% { transform: rotate(-8deg) translateX(-4px); }
+    100% { transform: rotate(0); }
+  }
+
+  /* Face shape using CSS */
+  .face-oval {
+    width: 80px;
+    height: 100px;
+    border-radius: 50% 50% 45% 45%;
+    position: absolute;
+    top: 0;
+    left: 10px;
+  }
+
+  .p1 .face-oval {
+    background: linear-gradient(180deg, #f5d5c8 0%, #e8bfad 100%);
+    border: 2px solid #d4a494;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  .p2 .face-oval {
+    background: linear-gradient(180deg, #f5d5c8 0%, #e8bfad 100%);
+    border: 2px solid #d4a494;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  /* Eyes */
+  .face-eyes {
+    position: absolute;
+    top: 34px;
+    left: 24px;
+    display: flex;
+    gap: 20px;
+  }
+
+  .eye {
+    width: 10px;
+    height: 10px;
+    background: #333;
+    border-radius: 50%;
+    position: relative;
+  }
+
+  .eye::after {
+    content: '';
+    position: absolute;
+    width: 3px;
+    height: 3px;
+    background: #fff;
+    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+  }
+
+  .face-mouth {
+    position: absolute;
+    top: 58px;
+    left: 35px;
+    width: 16px;
+    height: 8px;
+    border-bottom: 2px solid #c4887a;
+    border-radius: 0 0 50% 50%;
+  }
+
+  /* Slap target indicator */
+  .slap-target {
+    position: absolute;
+    top: 25px;
+    width: 100px;
+    height: 60px;
+    border: 2px dashed transparent;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .p1 .slap-target { border-color: rgba(231,76,60,0.25); }
+  .p2 .slap-target { border-color: rgba(52,152,219,0.25); }
+
+  .dummy-wrap:hover .slap-target {
+    background: rgba(255,0,0,0.05);
+  }
+
+  .slap-target-text {
+    font-size: 0.55rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    opacity: 0.4;
+  }
+
+  .p1 .slap-target-text { color: #e74c3c; }
+  .p2 .slap-target-text { color: #3498db; }
+
+  /* Neck/stand */
+  .dummy-neck {
+    position: absolute;
+    bottom: 0;
+    left: 38px;
+    width: 24px;
+    height: 25px;
+    background: #bbb;
+    border-radius: 0 0 4px 4px;
+  }
+
+  .dummy-base-plate {
+    width: 60px;
+    height: 8px;
+    background: #999;
+    border-radius: 4px;
+    margin-top: -2px;
+  }
+
+  /* Slap cheek flash */
+  .cheek-flash {
+    position: absolute;
+    top: 30px;
+    right: 8px;
+    width: 24px;
+    height: 20px;
+    background: rgba(255,80,80,0.5);
+    border-radius: 50%;
+    filter: blur(4px);
+    opacity: 0;
+    transition: opacity 0.1s;
+    pointer-events: none;
+  }
+
+  .dummy-wrap.slapped .cheek-flash {
+    animation: cheekRed 0.5s ease-out;
+  }
+
+  @keyframes cheekRed {
+    0% { opacity: 0.8; }
+    100% { opacity: 0; }
+  }
+
+  /* Force meter */
+  .force-meter {
+    width: 80px;
+    height: 6px;
+    background: #eee;
+    border-radius: 3px;
+    overflow: hidden;
+    margin-top: 4px;
+  }
+
+  .force-fill {
+    height: 100%;
+    width: 0%;
+    border-radius: 3px;
+    transition: width 0.15s, background 0.15s;
+  }
+
+  .p1 .force-fill { background: #e74c3c; }
+  .p2 .force-fill { background: #3498db; }
+
+  .force-label {
+    font-size: 0.6rem;
+    color: #bbb;
+    margin-top: 2px;
+  }
+
+  /* Hat */
+  .cowboy-hat {
+    position: absolute;
+    top: -16px;
+    left: 2px;
+    width: 96px;
+    height: 30px;
+  }
+
+  .hat-brim {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 96px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .p1 .hat-brim { background: #a93226; }
+  .p2 .hat-brim { background: #1a5276; }
+
+  .hat-crown {
+    position: absolute;
+    bottom: 6px;
+    left: 24px;
+    width: 48px;
+    height: 22px;
+    border-radius: 8px 8px 2px 2px;
+  }
+
+  .p1 .hat-crown { background: #c0392b; }
+  .p2 .hat-crown { background: #2471a3; }
+
+  /* ======== JOYSTICK ======== */
+  .joystick-row {
+    display: flex;
+    justify-content: center;
+    gap: 80px;
+    align-items: flex-start;
+  }
+
+  .joystick-unit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .joystick-wrap {
+    position: relative;
+    width: 80px;
+    height: 90px;
+    cursor: pointer;
+  }
+
+  .joystick-base-plate {
+    position: absolute;
+    bottom: 0;
+    left: 5px;
+    width: 70px;
+    height: 20px;
+    background: linear-gradient(180deg, #444, #333);
+    border-radius: 10px;
+    border: 2px solid #222;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+  }
+
+  .joystick-stick-wrap {
+    position: absolute;
+    bottom: 14px;
+    left: 50%;
+    transform: translateX(-50%);
+    transition: transform 0.1s;
+  }
+
+  .joystick-stick {
+    width: 10px;
+    height: 45px;
+    background: linear-gradient(90deg, #888, #bbb, #888);
+    border-radius: 3px;
+    margin: 0 auto;
+    border: 1px solid #666;
+  }
+
+  .joystick-ball {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    margin: 0 auto;
+    margin-top: -2px;
+    border: 2px solid rgba(0,0,0,0.2);
+  }
+
+  .p1 .joystick-ball {
+    background: radial-gradient(circle at 40% 35%, #f77, #e74c3c);
+    box-shadow: 0 2px 6px rgba(231,76,60,0.3);
+  }
+
+  .p2 .joystick-ball {
+    background: radial-gradient(circle at 40% 35%, #6cb4e6, #3498db);
+    box-shadow: 0 2px 6px rgba(52,152,219,0.3);
+  }
+
+  .joystick-wrap:hover .joystick-stick-wrap {
+    transform: translateX(-50%) rotate(8deg);
+  }
+
+  .crosshair-indicator {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 0.6rem;
+    color: #bbb;
+  }
+
+  .crosshair-icon {
+    width: 16px;
+    height: 16px;
+    border: 1.5px solid #bbb;
+    border-radius: 50%;
+    position: relative;
+  }
+
+  .crosshair-icon::before, .crosshair-icon::after {
+    content: '';
+    position: absolute;
+    background: #bbb;
+  }
+
+  .crosshair-icon::before {
+    width: 1px;
+    height: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+
+  .crosshair-icon::after {
+    width: 100%;
+    height: 1px;
+    top: 50%;
+    transform: translateY(-50%);
   }
 
   /* ======== SPEAKER ======== */
@@ -353,7 +684,7 @@
   /* ======== GAME STATE PANEL ======== */
   .game-panel {
     margin-top: 44px;
-    width: 880px;
+    width: 920px;
     max-width: 96vw;
     background: #fff;
     border: 1px solid #e0e0e0;
@@ -377,9 +708,7 @@
     gap: 16px;
   }
 
-  .stat-block {
-    text-align: center;
-  }
+  .stat-block { text-align: center; }
 
   .stat-value {
     font-size: 2rem;
@@ -419,6 +748,7 @@
     gap: 10px;
     margin-top: 16px;
     justify-content: center;
+    flex-wrap: wrap;
   }
 
   .action-btn {
@@ -451,13 +781,33 @@
     letter-spacing: 1px;
   }
 
-  /* Footer */
   .footer {
     margin-top: 40px;
     font-size: 0.7rem;
     color: #ccc;
     letter-spacing: 1px;
   }
+
+  /* Stars decoration for impact */
+  .impact-stars {
+    position: absolute;
+    top: 10px;
+    right: -5px;
+    pointer-events: none;
+    opacity: 0;
+  }
+
+  .dummy-wrap.slapped .impact-stars {
+    animation: starsAppear 0.4s ease-out;
+  }
+
+  @keyframes starsAppear {
+    0% { opacity: 1; transform: scale(0.5); }
+    50% { opacity: 1; transform: scale(1.2); }
+    100% { opacity: 0; transform: scale(1.5); }
+  }
+
+  .impact-stars svg { width: 40px; height: 40px; }
 </style>
 </head>
 <body>
@@ -477,7 +827,7 @@
     </div>
   </div>
   <div class="label-part">
-    <svg width="80" height="20"><line x1="0" y1="10" x2="68" y2="10" stroke="#333" stroke-width="2"/><polygon points="0,5 0,15 8,10" fill="#333"/></svg>
+    <svg class="arrow-svg" width="80" height="20"><line x1="0" y1="10" x2="68" y2="10" stroke="#333" stroke-width="2"/><polygon points="0,5 0,15 8,10" fill="#333"/></svg>
     <div>
       <div class="label-text">Screen</div>
       <div class="label-desc">16:9 display, Western themed UI</div>
@@ -485,7 +835,7 @@
   </div>
 </div>
 
-<div style="height: 24px;"></div>
+<div class="spacer"></div>
 
 <!-- ROW 2: Menu buttons -->
 <div class="diagram-row">
@@ -498,7 +848,7 @@
     </div>
   </div>
   <div class="label-part">
-    <svg width="80" height="20"><line x1="0" y1="10" x2="68" y2="10" stroke="#333" stroke-width="2"/><polygon points="0,5 0,15 8,10" fill="#333"/></svg>
+    <svg class="arrow-svg" width="80" height="20"><line x1="0" y1="10" x2="68" y2="10" stroke="#333" stroke-width="2"/><polygon points="0,5 0,15 8,10" fill="#333"/></svg>
     <div>
       <div class="label-text">Menu / Settings</div>
       <div class="label-desc">Mode select, volume, coin slot</div>
@@ -506,13 +856,21 @@
   </div>
 </div>
 
-<div style="height: 28px;"></div>
+<div class="spacer-lg"></div>
 
-<!-- ROW 3: Player buttons -->
+<!-- SECTION: Standard Controls -->
+<div class="section-header">
+  <div class="line"></div>
+  <div class="tag">STANDARD CONTROLS</div>
+  <div class="line"></div>
+</div>
+
+<div class="spacer"></div>
+
+<!-- ROW 3: Dome Buttons -->
 <div class="diagram-row">
   <div class="hw-part">
     <div class="player-controls">
-      <!-- P1 -->
       <div class="player-unit p1">
         <div class="player-tag">PLAYER 1</div>
         <div class="dome-btn-wrap" id="p1wrap">
@@ -525,7 +883,6 @@
         </div>
         <div class="key-hint">Press A</div>
       </div>
-      <!-- P2 -->
       <div class="player-unit p2">
         <div class="player-tag">PLAYER 2</div>
         <div class="dome-btn-wrap" id="p2wrap">
@@ -541,17 +898,155 @@
     </div>
   </div>
   <div class="label-part">
-    <svg width="80" height="20"><line x1="0" y1="10" x2="68" y2="10" stroke="#333" stroke-width="2"/><polygon points="0,5 0,15 8,10" fill="#333"/></svg>
+    <svg class="arrow-svg" width="80" height="20"><line x1="0" y1="10" x2="68" y2="10" stroke="#333" stroke-width="2"/><polygon points="0,5 0,15 8,10" fill="#333"/></svg>
     <div>
       <div class="label-text">Dome Buttons (100mm)</div>
-      <div class="label-desc">One per player — the only control</div>
+      <div class="label-desc">One per player — slam to fire</div>
     </div>
   </div>
 </div>
 
-<div style="height: 24px;"></div>
+<div class="spacer-lg"></div>
+<div class="spacer"></div>
 
-<!-- ROW 4: Speakers -->
+<!-- SECTION: Alternate Controls -->
+<div class="section-header">
+  <div class="line"></div>
+  <div class="tag alt">ALTERNATE CONTROLS</div>
+  <div class="line"></div>
+</div>
+
+<div class="spacer"></div>
+
+<!-- ROW 4: Slap Dummies -->
+<div class="diagram-row">
+  <div class="hw-part">
+    <div class="slap-dummy-row">
+      <div class="dummy-unit p1">
+        <div class="player-tag">PLAYER 1</div>
+        <div class="dummy-wrap" id="dummy1">
+          <div class="dummy-head">
+            <div class="cowboy-hat">
+              <div class="hat-crown"></div>
+              <div class="hat-brim"></div>
+            </div>
+            <div class="face-oval">
+              <div class="face-eyes">
+                <div class="eye"></div>
+                <div class="eye"></div>
+              </div>
+              <div class="face-mouth"></div>
+            </div>
+            <div class="slap-target">
+              <span class="slap-target-text">SLAP</span>
+            </div>
+            <div class="cheek-flash"></div>
+            <div class="impact-stars">
+              <svg viewBox="0 0 40 40">
+                <text x="4" y="16" font-size="14">💥</text>
+                <text x="20" y="32" font-size="10">⭐</text>
+              </svg>
+            </div>
+            <div class="dummy-neck"></div>
+          </div>
+          <div class="dummy-base-plate"></div>
+        </div>
+        <div class="force-meter"><div class="force-fill" id="force1"></div></div>
+        <div class="force-label">Force sensor</div>
+        <div class="key-hint">Press A / Click</div>
+      </div>
+      <div class="dummy-unit p2">
+        <div class="player-tag">PLAYER 2</div>
+        <div class="dummy-wrap" id="dummy2">
+          <div class="dummy-head">
+            <div class="cowboy-hat">
+              <div class="hat-crown"></div>
+              <div class="hat-brim"></div>
+            </div>
+            <div class="face-oval">
+              <div class="face-eyes">
+                <div class="eye"></div>
+                <div class="eye"></div>
+              </div>
+              <div class="face-mouth"></div>
+            </div>
+            <div class="slap-target">
+              <span class="slap-target-text">SLAP</span>
+            </div>
+            <div class="cheek-flash"></div>
+            <div class="impact-stars">
+              <svg viewBox="0 0 40 40">
+                <text x="4" y="16" font-size="14">💥</text>
+                <text x="20" y="32" font-size="10">⭐</text>
+              </svg>
+            </div>
+            <div class="dummy-neck"></div>
+          </div>
+          <div class="dummy-base-plate"></div>
+        </div>
+        <div class="force-meter"><div class="force-fill" id="force2"></div></div>
+        <div class="force-label">Force sensor</div>
+        <div class="key-hint">Press L / Click</div>
+      </div>
+    </div>
+  </div>
+  <div class="label-part">
+    <svg class="arrow-svg" width="80" height="20"><line x1="0" y1="10" x2="68" y2="10" stroke="#333" stroke-width="2"/><polygon points="0,5 0,15 8,10" fill="#333"/></svg>
+    <div>
+      <div class="label-text">Slap Dummies</div>
+      <div class="label-desc">Padded face target with force sensor<br/>Slap to fire — harder slap = more drama</div>
+    </div>
+  </div>
+</div>
+
+<div class="spacer-lg"></div>
+
+<!-- ROW 5: Joystick + Button -->
+<div class="diagram-row">
+  <div class="hw-part">
+    <div class="joystick-row">
+      <div class="joystick-unit p1">
+        <div class="player-tag">PLAYER 1</div>
+        <div class="joystick-wrap" id="joy1">
+          <div class="joystick-stick-wrap">
+            <div class="joystick-ball"></div>
+            <div class="joystick-stick"></div>
+          </div>
+          <div class="joystick-base-plate"></div>
+        </div>
+        <div class="crosshair-indicator">
+          <div class="crosshair-icon"></div>
+          <span>Aim</span>
+        </div>
+      </div>
+      <div class="joystick-unit p2">
+        <div class="player-tag">PLAYER 2</div>
+        <div class="joystick-wrap" id="joy2">
+          <div class="joystick-stick-wrap">
+            <div class="joystick-ball"></div>
+            <div class="joystick-stick"></div>
+          </div>
+          <div class="joystick-base-plate"></div>
+        </div>
+        <div class="crosshair-indicator">
+          <div class="crosshair-icon"></div>
+          <span>Aim</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="label-part">
+    <svg class="arrow-svg" width="80" height="20"><line x1="0" y1="10" x2="68" y2="10" stroke="#333" stroke-width="2"/><polygon points="0,5 0,15 8,10" fill="#333"/></svg>
+    <div>
+      <div class="label-text">Joystick (Aim Mode)</div>
+      <div class="label-desc">Analog stick for aiming variant<br/>Pair with dome button for fire</div>
+    </div>
+  </div>
+</div>
+
+<div class="spacer"></div>
+
+<!-- ROW 7: Speakers -->
 <div class="diagram-row">
   <div class="hw-part">
     <div class="speakers-row">
@@ -568,10 +1063,10 @@
     </div>
   </div>
   <div class="label-part">
-    <svg width="80" height="20"><line x1="0" y1="10" x2="68" y2="10" stroke="#333" stroke-width="2"/><polygon points="0,5 0,15 8,10" fill="#333"/></svg>
+    <svg class="arrow-svg" width="80" height="20"><line x1="0" y1="10" x2="68" y2="10" stroke="#333" stroke-width="2"/><polygon points="0,5 0,15 8,10" fill="#333"/></svg>
     <div>
       <div class="label-text">Stereo Speakers</div>
-      <div class="label-desc">Directional gunshot SFX</div>
+      <div class="label-desc">Directional gunshot SFX + slap sounds</div>
     </div>
   </div>
 </div>
@@ -596,17 +1091,16 @@
     <button class="action-btn" id="resetBtn">Reset</button>
     <button class="action-btn" id="modeBtn">Mode: Quick Draw</button>
   </div>
-  <div class="mode-indicator" id="modeDesc">First to press after "DRAW!" wins</div>
+  <div class="mode-indicator" id="modeDesc">First to press/slap/draw after "DRAW!" wins</div>
 </div>
 
 <div class="footer">Designed by Tielong — Concept 2026</div>
 
 <script>
-  // === AUDIO via Web Audio API ===
+  // === AUDIO ===
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
   function playGunshot(pan = 0) {
-    // White noise burst shaped like a gunshot
     const duration = 0.15;
     const bufferSize = audioCtx.sampleRate * duration;
     const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
@@ -616,19 +1110,38 @@
     }
     const source = audioCtx.createBufferSource();
     source.buffer = buffer;
-
     const gain = audioCtx.createGain();
     gain.gain.setValueAtTime(0.4, audioCtx.currentTime);
     gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
-
     const panner = audioCtx.createStereoPanner();
     panner.pan.value = pan;
-
-    // Low pass for body
     const filter = audioCtx.createBiquadFilter();
     filter.type = 'lowpass';
     filter.frequency.value = 3000;
+    source.connect(filter).connect(gain).connect(panner).connect(audioCtx.destination);
+    source.start();
+  }
 
+  function playSlap(pan = 0) {
+    // Slap sound: short burst with mid-high frequencies
+    const duration = 0.08;
+    const bufferSize = audioCtx.sampleRate * duration;
+    const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < bufferSize; i++) {
+      data[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / bufferSize, 6);
+    }
+    const source = audioCtx.createBufferSource();
+    source.buffer = buffer;
+    const gain = audioCtx.createGain();
+    gain.gain.setValueAtTime(0.5, audioCtx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+    const panner = audioCtx.createStereoPanner();
+    panner.pan.value = pan;
+    const filter = audioCtx.createBiquadFilter();
+    filter.type = 'bandpass';
+    filter.frequency.value = 2000;
+    filter.Q.value = 0.5;
     source.connect(filter).connect(gain).connect(panner).connect(audioCtx.destination);
     source.start();
   }
@@ -672,15 +1185,18 @@
   const modeBtn = document.getElementById('modeBtn');
   const modeDesc = document.getElementById('modeDesc');
   const coinBtn = document.getElementById('coinBtn');
+  const force1 = document.getElementById('force1');
+  const force2 = document.getElementById('force2');
 
-  let state = 'idle'; // idle, countdown, draw, done, rush, rushDone
-  let mode = 'quickdraw'; // quickdraw, gunrush
+  let state = 'idle';
+  let mode = 'quickdraw';
   let drawTime = 0;
   let p1score = 0, p2score = 0;
   let rushTimer = null;
   let rushP1 = 0, rushP2 = 0;
   let rushDuration = 5000;
   let countdownTimer = null;
+  let tickInterval = null;
 
   function flash() {
     screenFlash.style.opacity = '1';
@@ -693,7 +1209,31 @@
     screenSub.textContent = sub || '';
   }
 
-  // === QUICK DRAW ===
+  // Slap dummy animation
+  function slapDummy(player) {
+    const dummy = document.getElementById('dummy' + player);
+    dummy.classList.remove('slapped');
+    void dummy.offsetWidth; // reflow
+    dummy.classList.add('slapped');
+
+    // Random force
+    const force = 50 + Math.random() * 50;
+    const fill = player === 1 ? force1 : force2;
+    fill.style.width = force + '%';
+    setTimeout(() => fill.style.width = '0%', 600);
+
+    playSlap(player === 1 ? -0.8 : 0.8);
+  }
+
+  // Combined press handler
+  function pressButton(player) {
+    audioCtx.resume();
+    slapDummy(player);
+    playGunshot(player === 1 ? -0.8 : 0.8);
+    if (mode === 'quickdraw') handleQuickDrawPress(player);
+    else handleGunRushPress(player);
+  }
+
   function startQuickDraw() {
     if (state !== 'idle') return;
     state = 'countdown';
@@ -701,14 +1241,9 @@
     startBtn.disabled = true;
 
     const delay = 1500 + Math.random() * 3000;
-    setScreen('GET READY...', 'Hands off the buttons!');
+    setScreen('GET READY...', 'Hands off!');
 
-    // Fake tension ticks
-    let tickCount = 0;
-    const tickInterval = setInterval(() => {
-      playTick();
-      tickCount++;
-    }, 400 + Math.random() * 300);
+    tickInterval = setInterval(() => playTick(), 400 + Math.random() * 300);
 
     countdownTimer = setTimeout(() => {
       clearInterval(tickInterval);
@@ -723,8 +1258,8 @@
 
   function handleQuickDrawPress(player) {
     if (state === 'countdown') {
-      // False start!
       clearTimeout(countdownTimer);
+      clearInterval(tickInterval);
       state = 'idle';
       startBtn.disabled = false;
       const winner = player === 1 ? 2 : 1;
@@ -732,7 +1267,6 @@
       updateScores();
       setScreen(`P${winner} WINS!`, `P${player} jumped the gun!`, winner === 1 ? 'state-p1wins' : 'state-p2wins');
       reactionMsg.innerHTML = `<span class="slow">FALSE START by P${player}!</span>`;
-      if (player === 1) playGunshot(-0.8); else playGunshot(0.8);
       flash();
       p1ring.classList.remove('active');
       p2ring.classList.remove('active');
@@ -740,11 +1274,10 @@
     }
 
     if (state !== 'draw') return;
-    state = 'done';
+    state = 'idle';
     startBtn.disabled = false;
     const rt = (performance.now() - drawTime).toFixed(1);
-    if (player === 1) { p1score++; playGunshot(-0.8); }
-    else { p2score++; playGunshot(0.8); }
+    if (player === 1) p1score++; else p2score++;
     updateScores();
     flash();
 
@@ -755,18 +1288,15 @@
     reactionMsg.innerHTML = `P${player} drew in <span class="${speed}">${rt}ms</span>`;
     p1ring.classList.remove('active');
     p2ring.classList.remove('active');
-    state = 'idle';
   }
 
-  // === GUN RUSH ===
   function startGunRush() {
     if (state !== 'idle') return;
     state = 'countdown';
     reactionMsg.innerHTML = '';
     startBtn.disabled = true;
     rushP1 = 0; rushP2 = 0;
-
-    setScreen('GET READY...', 'Mash when it says GO!');
+    setScreen('GET READY...', 'Mash / Slap when GO!');
 
     countdownTimer = setTimeout(() => {
       state = 'rush';
@@ -790,8 +1320,7 @@
 
   function handleGunRushPress(player) {
     if (state !== 'rush') return;
-    if (player === 1) { rushP1++; playGunshot(-0.8); }
-    else { rushP2++; playGunshot(0.8); }
+    if (player === 1) rushP1++; else rushP2++;
     flash();
   }
 
@@ -813,15 +1342,8 @@
     } else {
       const cls = winner === 1 ? 'state-p1wins' : 'state-p2wins';
       setScreen(`PLAYER ${winner} WINS!`, `P1: ${rushP1} vs P2: ${rushP2}`, cls);
-      reactionMsg.innerHTML = `P${winner} wins with <span class="fast">${winner === 1 ? rushP1 : rushP2} presses</span>`;
+      reactionMsg.innerHTML = `P${winner} wins with <span class="fast">${winner === 1 ? rushP1 : rushP2} hits</span>`;
     }
-  }
-
-  // === CONTROLS ===
-  function pressButton(player) {
-    audioCtx.resume();
-    if (mode === 'quickdraw') handleQuickDrawPress(player);
-    else handleGunRushPress(player);
   }
 
   function updateScores() {
@@ -839,6 +1361,7 @@
     state = 'idle';
     clearTimeout(countdownTimer);
     clearInterval(rushTimer);
+    clearInterval(tickInterval);
     startBtn.disabled = false;
     p1score = 0; p2score = 0;
     updateScores();
@@ -853,8 +1376,8 @@
     mode = mode === 'quickdraw' ? 'gunrush' : 'quickdraw';
     modeBtn.textContent = mode === 'quickdraw' ? 'Mode: Quick Draw' : 'Mode: Gun Rush';
     modeDesc.textContent = mode === 'quickdraw'
-      ? 'First to press after "DRAW!" wins'
-      : 'Mash the button — most presses in 5s wins';
+      ? 'First to press/slap/draw after "DRAW!" wins'
+      : 'Mash/slap — most hits in 5s wins';
     setScreen('WEST HUNT', mode === 'quickdraw' ? 'QUICK DRAW' : 'GUN RUSH');
   });
 
@@ -871,11 +1394,18 @@
     if (e.key === 'l' || e.key === 'L') pressButton(2);
   });
 
-  // Mouse/touch on dome buttons
-  document.getElementById('p1wrap').addEventListener('mousedown', () => pressButton(1));
-  document.getElementById('p2wrap').addEventListener('mousedown', () => pressButton(2));
-  document.getElementById('p1wrap').addEventListener('touchstart', (e) => { e.preventDefault(); pressButton(1); });
-  document.getElementById('p2wrap').addEventListener('touchstart', (e) => { e.preventDefault(); pressButton(2); });
+  // Mouse/touch on all interactive elements
+  ['p1wrap', 'dummy1'].forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener('mousedown', () => pressButton(1));
+    el.addEventListener('touchstart', (e) => { e.preventDefault(); pressButton(1); });
+  });
+
+  ['p2wrap', 'dummy2'].forEach(id => {
+    const el = document.getElementById(id);
+    el.addEventListener('mousedown', () => pressButton(2));
+    el.addEventListener('touchstart', (e) => { e.preventDefault(); pressButton(2); });
+  });
 </script>
 
 </body>
