@@ -39,7 +39,7 @@
   .diagram-row {
     display: flex;
     align-items: center;
-    width: 920px;
+    width: 1100px;
     max-width: 96vw;
     margin: 0 auto;
   }
@@ -47,7 +47,7 @@
   .hw-part {
     display: flex;
     justify-content: center;
-    width: 500px;
+    width: 680px;
     flex-shrink: 0;
   }
 
@@ -171,7 +171,7 @@
 
   /* ======== SECTION HEADERS ======== */
   .section-header {
-    width: 920px;
+    width: 1100px;
     max-width: 96vw;
     margin: 0 auto;
     display: flex;
@@ -207,7 +207,7 @@
   .player-controls {
     display: flex;
     justify-content: center;
-    gap: 60px;
+    gap: 24px;
     align-items: flex-start;
   }
 
@@ -320,7 +320,7 @@
   .slap-dummy-row {
     display: flex;
     justify-content: center;
-    gap: 60px;
+    gap: 20px;
     align-items: flex-start;
   }
 
@@ -552,114 +552,59 @@
   .p1 .hat-crown { background: #c0392b; }
   .p2 .hat-crown { background: #2471a3; }
 
-  /* ======== JOYSTICK ======== */
-  .joystick-row {
+  /* ======== SIDE-BY-SIDE CONTROLS ======== */
+  .controls-sidebyside {
     display: flex;
-    justify-content: center;
-    gap: 80px;
     align-items: flex-start;
+    gap: 0;
+    width: 100%;
   }
 
-  .joystick-unit {
+  .control-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .control-group-label {
+    font-size: 0.65rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #999;
+    padding: 3px 14px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    background: #fff;
+  }
+
+  .control-group-label.alt-label {
+    color: #d4a24e;
+    border-color: #e8d5a8;
+    background: #fffdf5;
+  }
+
+  .or-divider {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 6px;
+    padding: 40px 12px 0;
+    flex-shrink: 0;
   }
 
-  .joystick-wrap {
-    position: relative;
-    width: 80px;
-    height: 90px;
-    cursor: pointer;
-  }
-
-  .joystick-base-plate {
-    position: absolute;
-    bottom: 0;
-    left: 5px;
-    width: 70px;
-    height: 20px;
-    background: linear-gradient(180deg, #444, #333);
-    border-radius: 10px;
-    border: 2px solid #222;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
-  }
-
-  .joystick-stick-wrap {
-    position: absolute;
-    bottom: 14px;
-    left: 50%;
-    transform: translateX(-50%);
-    transition: transform 0.1s;
-  }
-
-  .joystick-stick {
-    width: 10px;
-    height: 45px;
-    background: linear-gradient(90deg, #888, #bbb, #888);
-    border-radius: 3px;
-    margin: 0 auto;
-    border: 1px solid #666;
-  }
-
-  .joystick-ball {
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    margin: 0 auto;
-    margin-top: -2px;
-    border: 2px solid rgba(0,0,0,0.2);
-  }
-
-  .p1 .joystick-ball {
-    background: radial-gradient(circle at 40% 35%, #f77, #e74c3c);
-    box-shadow: 0 2px 6px rgba(231,76,60,0.3);
-  }
-
-  .p2 .joystick-ball {
-    background: radial-gradient(circle at 40% 35%, #6cb4e6, #3498db);
-    box-shadow: 0 2px 6px rgba(52,152,219,0.3);
-  }
-
-  .joystick-wrap:hover .joystick-stick-wrap {
-    transform: translateX(-50%) rotate(8deg);
-  }
-
-  .crosshair-indicator {
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.6rem;
-    color: #bbb;
-  }
-
-  .crosshair-icon {
-    width: 16px;
-    height: 16px;
-    border: 1.5px solid #bbb;
-    border-radius: 50%;
-    position: relative;
-  }
-
-  .crosshair-icon::before, .crosshair-icon::after {
-    content: '';
-    position: absolute;
-    background: #bbb;
-  }
-
-  .crosshair-icon::before {
+  .or-line {
     width: 1px;
-    height: 100%;
-    left: 50%;
-    transform: translateX(-50%);
+    height: 40px;
+    background: #ddd;
   }
 
-  .crosshair-icon::after {
-    width: 100%;
-    height: 1px;
-    top: 50%;
-    transform: translateY(-50%);
+  .or-text {
+    font-size: 0.7rem;
+    font-weight: 700;
+    color: #bbb;
+    letter-spacing: 2px;
   }
 
   /* ======== SPEAKER ======== */
@@ -684,7 +629,7 @@
   /* ======== GAME STATE PANEL ======== */
   .game-panel {
     margin-top: 44px;
-    width: 920px;
+    width: 1100px;
     max-width: 96vw;
     background: #fff;
     border: 1px solid #e0e0e0;
@@ -858,188 +803,136 @@
 
 <div class="spacer-lg"></div>
 
-<!-- SECTION: Standard Controls -->
+<!-- SECTION: Player Controls -->
 <div class="section-header">
   <div class="line"></div>
-  <div class="tag">STANDARD CONTROLS</div>
+  <div class="tag">PLAYER CONTROLS</div>
   <div class="line"></div>
 </div>
 
 <div class="spacer"></div>
 
-<!-- ROW 3: Dome Buttons -->
+<!-- ROW 3: Combined — Dome Button + Slap Dummy side by side -->
 <div class="diagram-row">
   <div class="hw-part">
-    <div class="player-controls">
-      <div class="player-unit p1">
-        <div class="player-tag">PLAYER 1</div>
-        <div class="dome-btn-wrap" id="p1wrap">
-          <div class="dome-btn">
-            <div class="dome-base"></div>
-            <div class="dome-highlight"></div>
-            <div class="led-ring" id="p1ring"></div>
-            <span class="dome-label">FIRE</span>
-          </div>
-        </div>
-        <div class="key-hint">Press A</div>
-      </div>
-      <div class="player-unit p2">
-        <div class="player-tag">PLAYER 2</div>
-        <div class="dome-btn-wrap" id="p2wrap">
-          <div class="dome-btn">
-            <div class="dome-base"></div>
-            <div class="dome-highlight"></div>
-            <div class="led-ring" id="p2ring"></div>
-            <span class="dome-label">FIRE</span>
-          </div>
-        </div>
-        <div class="key-hint">Press L</div>
-      </div>
-    </div>
-  </div>
-  <div class="label-part">
-    <svg class="arrow-svg" width="80" height="20"><line x1="0" y1="10" x2="68" y2="10" stroke="#333" stroke-width="2"/><polygon points="0,5 0,15 8,10" fill="#333"/></svg>
-    <div>
-      <div class="label-text">Dome Buttons (100mm)</div>
-      <div class="label-desc">One per player — slam to fire</div>
-    </div>
-  </div>
-</div>
-
-<div class="spacer-lg"></div>
-<div class="spacer"></div>
-
-<!-- SECTION: Alternate Controls -->
-<div class="section-header">
-  <div class="line"></div>
-  <div class="tag alt">ALTERNATE CONTROLS</div>
-  <div class="line"></div>
-</div>
-
-<div class="spacer"></div>
-
-<!-- ROW 4: Slap Dummies -->
-<div class="diagram-row">
-  <div class="hw-part">
-    <div class="slap-dummy-row">
-      <div class="dummy-unit p1">
-        <div class="player-tag">PLAYER 1</div>
-        <div class="dummy-wrap" id="dummy1">
-          <div class="dummy-head">
-            <div class="cowboy-hat">
-              <div class="hat-crown"></div>
-              <div class="hat-brim"></div>
-            </div>
-            <div class="face-oval">
-              <div class="face-eyes">
-                <div class="eye"></div>
-                <div class="eye"></div>
+    <div class="controls-sidebyside">
+      <!-- Left: Dome Buttons -->
+      <div class="control-group">
+        <div class="control-group-label">Dome Button</div>
+        <div class="player-controls">
+          <div class="player-unit p1">
+            <div class="player-tag">PLAYER 1</div>
+            <div class="dome-btn-wrap" id="p1wrap">
+              <div class="dome-btn">
+                <div class="dome-base"></div>
+                <div class="dome-highlight"></div>
+                <div class="led-ring" id="p1ring"></div>
+                <span class="dome-label">FIRE</span>
               </div>
-              <div class="face-mouth"></div>
             </div>
-            <div class="slap-target">
-              <span class="slap-target-text">SLAP</span>
-            </div>
-            <div class="cheek-flash"></div>
-            <div class="impact-stars">
-              <svg viewBox="0 0 40 40">
-                <text x="4" y="16" font-size="14">💥</text>
-                <text x="20" y="32" font-size="10">⭐</text>
-              </svg>
-            </div>
-            <div class="dummy-neck"></div>
+            <div class="key-hint">Press A</div>
           </div>
-          <div class="dummy-base-plate"></div>
-        </div>
-        <div class="force-meter"><div class="force-fill" id="force1"></div></div>
-        <div class="force-label">Force sensor</div>
-        <div class="key-hint">Press A / Click</div>
-      </div>
-      <div class="dummy-unit p2">
-        <div class="player-tag">PLAYER 2</div>
-        <div class="dummy-wrap" id="dummy2">
-          <div class="dummy-head">
-            <div class="cowboy-hat">
-              <div class="hat-crown"></div>
-              <div class="hat-brim"></div>
-            </div>
-            <div class="face-oval">
-              <div class="face-eyes">
-                <div class="eye"></div>
-                <div class="eye"></div>
+          <div class="player-unit p2">
+            <div class="player-tag">PLAYER 2</div>
+            <div class="dome-btn-wrap" id="p2wrap">
+              <div class="dome-btn">
+                <div class="dome-base"></div>
+                <div class="dome-highlight"></div>
+                <div class="led-ring" id="p2ring"></div>
+                <span class="dome-label">FIRE</span>
               </div>
-              <div class="face-mouth"></div>
             </div>
-            <div class="slap-target">
-              <span class="slap-target-text">SLAP</span>
-            </div>
-            <div class="cheek-flash"></div>
-            <div class="impact-stars">
-              <svg viewBox="0 0 40 40">
-                <text x="4" y="16" font-size="14">💥</text>
-                <text x="20" y="32" font-size="10">⭐</text>
-              </svg>
-            </div>
-            <div class="dummy-neck"></div>
+            <div class="key-hint">Press L</div>
           </div>
-          <div class="dummy-base-plate"></div>
         </div>
-        <div class="force-meter"><div class="force-fill" id="force2"></div></div>
-        <div class="force-label">Force sensor</div>
-        <div class="key-hint">Press L / Click</div>
+      </div>
+
+      <!-- Divider -->
+      <div class="or-divider">
+        <div class="or-line"></div>
+        <span class="or-text">OR</span>
+        <div class="or-line"></div>
+      </div>
+
+      <!-- Right: Slap Dummies -->
+      <div class="control-group">
+        <div class="control-group-label alt-label">Slap Dummy</div>
+        <div class="slap-dummy-row">
+          <div class="dummy-unit p1">
+            <div class="player-tag">PLAYER 1</div>
+            <div class="dummy-wrap" id="dummy1">
+              <div class="dummy-head">
+                <div class="cowboy-hat">
+                  <div class="hat-crown"></div>
+                  <div class="hat-brim"></div>
+                </div>
+                <div class="face-oval">
+                  <div class="face-eyes">
+                    <div class="eye"></div>
+                    <div class="eye"></div>
+                  </div>
+                  <div class="face-mouth"></div>
+                </div>
+                <div class="slap-target">
+                  <span class="slap-target-text">SLAP</span>
+                </div>
+                <div class="cheek-flash"></div>
+                <div class="impact-stars">
+                  <svg viewBox="0 0 40 40">
+                    <text x="4" y="16" font-size="14">💥</text>
+                    <text x="20" y="32" font-size="10">⭐</text>
+                  </svg>
+                </div>
+                <div class="dummy-neck"></div>
+              </div>
+              <div class="dummy-base-plate"></div>
+            </div>
+            <div class="force-meter"><div class="force-fill" id="force1"></div></div>
+            <div class="force-label">Force sensor</div>
+            <div class="key-hint">Click face</div>
+          </div>
+          <div class="dummy-unit p2">
+            <div class="player-tag">PLAYER 2</div>
+            <div class="dummy-wrap" id="dummy2">
+              <div class="dummy-head">
+                <div class="cowboy-hat">
+                  <div class="hat-crown"></div>
+                  <div class="hat-brim"></div>
+                </div>
+                <div class="face-oval">
+                  <div class="face-eyes">
+                    <div class="eye"></div>
+                    <div class="eye"></div>
+                  </div>
+                  <div class="face-mouth"></div>
+                </div>
+                <div class="slap-target">
+                  <span class="slap-target-text">SLAP</span>
+                </div>
+                <div class="cheek-flash"></div>
+                <div class="impact-stars">
+                  <svg viewBox="0 0 40 40">
+                    <text x="4" y="16" font-size="14">💥</text>
+                    <text x="20" y="32" font-size="10">⭐</text>
+                  </svg>
+                </div>
+                <div class="dummy-neck"></div>
+              </div>
+              <div class="dummy-base-plate"></div>
+            </div>
+            <div class="force-meter"><div class="force-fill" id="force2"></div></div>
+            <div class="force-label">Force sensor</div>
+            <div class="key-hint">Click face</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
   <div class="label-part">
     <svg class="arrow-svg" width="80" height="20"><line x1="0" y1="10" x2="68" y2="10" stroke="#333" stroke-width="2"/><polygon points="0,5 0,15 8,10" fill="#333"/></svg>
     <div>
-      <div class="label-text">Slap Dummies</div>
-      <div class="label-desc">Padded face target with force sensor<br/>Slap to fire — harder slap = more drama</div>
-    </div>
-  </div>
-</div>
-
-<div class="spacer-lg"></div>
-
-<!-- ROW 5: Joystick + Button -->
-<div class="diagram-row">
-  <div class="hw-part">
-    <div class="joystick-row">
-      <div class="joystick-unit p1">
-        <div class="player-tag">PLAYER 1</div>
-        <div class="joystick-wrap" id="joy1">
-          <div class="joystick-stick-wrap">
-            <div class="joystick-ball"></div>
-            <div class="joystick-stick"></div>
-          </div>
-          <div class="joystick-base-plate"></div>
-        </div>
-        <div class="crosshair-indicator">
-          <div class="crosshair-icon"></div>
-          <span>Aim</span>
-        </div>
-      </div>
-      <div class="joystick-unit p2">
-        <div class="player-tag">PLAYER 2</div>
-        <div class="joystick-wrap" id="joy2">
-          <div class="joystick-stick-wrap">
-            <div class="joystick-ball"></div>
-            <div class="joystick-stick"></div>
-          </div>
-          <div class="joystick-base-plate"></div>
-        </div>
-        <div class="crosshair-indicator">
-          <div class="crosshair-icon"></div>
-          <span>Aim</span>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="label-part">
-    <svg class="arrow-svg" width="80" height="20"><line x1="0" y1="10" x2="68" y2="10" stroke="#333" stroke-width="2"/><polygon points="0,5 0,15 8,10" fill="#333"/></svg>
-    <div>
-      <div class="label-text">Joystick (Aim Mode)</div>
-      <div class="label-desc">Analog stick for aiming variant<br/>Pair with dome button for fire</div>
+      <div class="label-text">(Vanilla) Control Interface</div>
+      <div class="label-desc">Dome button OR slap dummy per player<br/>One-input design — maximum spectacle</div>
     </div>
   </div>
 </div>
